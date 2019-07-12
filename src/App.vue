@@ -1035,4 +1035,7 @@ h6 {
 }
 
 /* github theme */
+.gh-text, .gh-text, .gh-count{
+  color: #19be6b90;
+}
 </style>
