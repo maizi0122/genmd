@@ -1,7 +1,7 @@
 <template>
   <div id="app" class="bg">
     <div class="title">
-      <h3 class="title-center">~ root#  echo 'Gen Markdown helps you develop APIs faster!'</h3>
+      <h3 class="title-center">{{$t('title')}}</h3>
       <div class="title-right">
         <digital-clock 
         class="clock"
@@ -121,21 +121,21 @@
       <Table v-else border :columns="requestColumns" :data="requestData"></Table>
     </Card>
     <Card :padding="8" bordered dis-hover class="card">
-      <h6 class="title-label">响应体</h6>
+      <h6 class="title-label">{{$t('response')}}</h6>
       <Table class="value-content" border :columns="responseColumns" :data="responseData"></Table>
     </Card>
     <Affix :offset-bottom="20">
       <div class="btn-group">
-        <Button class="btn" :type="btnGroupStyle" ghost @click="showHeaders">请求头</Button>
-        <Button class="btn" :type="btnGroupStyle" ghost @click="showHow">演示</Button>
-        <Button class="btn" :type="btnGroupStyle" ghost @click="openCORS">CORS</Button>
-        <Button class="btn" :type="btnGroupStyle" ghost @click="showDesc">填充描述</Button>
-        <Button class="btn" :type="btnGroupStyle" ghost @click="cleanData">重置数据</Button>
-        <Button class="btn" :type="btnGroupStyle" ghost @click="showMarkdown">生成Markdown</Button>
+        <Button class="btn" :type="btnGroupStyle" ghost @click="showHeaders">{{$t('btn_add_header')}}</Button>
+        <Button class="btn" :type="btnGroupStyle" ghost @click="showHow">{{$t('btn_tutorial')}}</Button>
+        <Button class="btn" :type="btnGroupStyle" ghost @click="openCORS">{{$t('btn_cors')}}</Button>
+        <Button class="btn" :type="btnGroupStyle" ghost @click="showDesc">{{$t('btn_add_description')}}</Button>
+        <Button class="btn" :type="btnGroupStyle" ghost @click="cleanData">{{$t('btn_reset')}}</Button>
+        <Button class="btn" :type="btnGroupStyle" ghost @click="showMarkdown">{{$t('btn_build_md')}}</Button>
       </div>
     </Affix>
     <BackTop :height="100" :bottom="20">
-      <div class="top">返回顶端</div>
+      <div class="top">{{$t('btn_back_top')}}</div>
     </BackTop>
   </div>
 </template>
@@ -477,7 +477,11 @@ ${responseBodyTable}
         this.$Message.success("请求成功");
         this.$Loading.finish();
       } catch (error) {
-        this.$Message.error(error.toString());
+        if(!this.$Message.isShow){
+          this.$Message.isShow = true
+          this.$Message.error(error.toString());
+          this.$Message.isShow = false
+        }
         this.$Loading.error();
       } finally {
         this.loading = false;
@@ -638,7 +642,7 @@ ${responseBodyTable}
       headersData: [],
       headersColumns: [
         {
-          title: "键",
+          title: this.$t('key'),
           key: "name",
           render: (h, params) => {
             return h("Input", {
@@ -659,7 +663,7 @@ ${responseBodyTable}
           }
         },
         {
-          title: "值",
+          title: this.$t('value'),
           key: "age",
           render: (h, params) => {
             return h("Input", {
@@ -680,7 +684,7 @@ ${responseBodyTable}
           }
         },
         {
-          title: "描述",
+          title: this.$t('description'),
           key: "address",
           render: (h, params) => {
             return h("Input", {
@@ -701,7 +705,7 @@ ${responseBodyTable}
           }
         },
         {
-          title: "操作",
+          title: this.$t('action'),
           key: "action",
           width: 150,
           align: "center",
@@ -721,7 +725,7 @@ ${responseBodyTable}
                     }
                   }
                 },
-                "删除"
+                this.$t('btn_delete')
               )
             ]);
           }
@@ -729,7 +733,7 @@ ${responseBodyTable}
       ],
       requestColumns: [
         {
-          title: "键",
+          title: this.$t('key'),
           key: "name",
           render: (h, params) => {
             return h("Input", {
@@ -750,7 +754,7 @@ ${responseBodyTable}
           }
         },
         {
-          title: "值",
+          title: this.$t('value'),
           key: "age",
           render: (h, params) => {
             return h("Input", {
@@ -771,7 +775,7 @@ ${responseBodyTable}
           }
         },
         {
-          title: "描述",
+          title: this.$t('description'),
           key: "address",
           render: (h, params) => {
             return h("Input", {
@@ -792,7 +796,7 @@ ${responseBodyTable}
           }
         },
         {
-          title: "操作",
+          title: this.$t('action'),
           key: "action",
           width: 150,
           align: "center",
@@ -811,7 +815,7 @@ ${responseBodyTable}
                     }
                   }
                 },
-                "删除"
+                this.$t('btn_delete')
               )
             ]);
           }
@@ -819,21 +823,21 @@ ${responseBodyTable}
       ],
       responseColumns: [
         {
-          title: "键",
+          title: this.$t('key'),
           key: "name",
           render: (h, params) => {
             return h("div", [params.row.key]);
           }
         },
         {
-          title: "值",
+          title: this.$t('value'),
           key: "age",
           render: (h, params) => {
             return h("div", [params.row.value]);
           }
         },
         {
-          title: "描述",
+          title: this.$t('description'),
           key: "address",
           render: (h, params) => {
             return h("Input", {
@@ -854,7 +858,7 @@ ${responseBodyTable}
           }
         },
         {
-          title: "操作",
+          title: this.$t('action'),
           key: "action",
           width: 150,
           align: "center",
@@ -873,7 +877,7 @@ ${responseBodyTable}
                     }
                   }
                 },
-                "删除"
+                this.$t('btn_delete')
               )
             ]);
           }
@@ -883,7 +887,7 @@ ${responseBodyTable}
         {
           key: "id",
           value: "100001",
-          description: "请输入用户的ID"
+          description: this.$t('input_id')
         }
       ],
       gitWatchers: 0,

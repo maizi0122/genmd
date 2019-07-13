@@ -1,6 +1,8 @@
 import Vue from 'vue'
 import App from './App.vue'
 
+import i18n from './i18n'
+
 import { Button, Table,Modal ,Card,Select,Option,Input,Icon,Affix,BackTop,LoadingBar,Message} from 'iview';
 
 Vue.component('Button', Button);
@@ -26,4 +28,5 @@ Vue.config.productionTip = false
 
 new Vue({
   render: h => h(App),
+  i18n
 }).$mount('#app')
