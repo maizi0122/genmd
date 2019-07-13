@@ -8,26 +8,30 @@
         :blink="true"
         :displaySeconds="true"
         :twelveHour="false"/>
-        <span class="github-btn github-stargazers" id="github-btn">
-          <a class="gh-btn" id="gh-btn" :href="githubURL" target="_blank" aria-label="Star on GitHub">
-            <span class="gh-ico" aria-hidden="true"></span>
-            <span class="gh-text" id="gh-text">Star</span>
+        <Dropdown :transfer="true" @on-click="handleSelectedLang">
+          <a href="javascript:void(0)" style="color:#19be6b;">
+              {{languageName}}
+              <Icon color="#19be6b" type="ios-arrow-down"></Icon>
           </a>
-          <a class="gh-count" id="gh-count" :href="githubURL" target="_blank" aria-label="162 stargazers on GitHub" style="display: block;">{{gitWatchers}}</a>
-        </span>
-        <a :href="githubURL">
-          <svg class="octicon octicon-mark-github v-align-middle" height="32" viewBox="0 0 16 16" version="1.1" width="32" aria-hidden="true"><path fill-rule="evenodd" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z"></path></svg>
-        </a>
+          <DropdownMenu slot="list">
+              <DropdownItem v-for="item of $supportLang" :name="item.key" :key="item.key">{{item.value}}</DropdownItem>
+          </DropdownMenu>
+        </Dropdown>
+        <div>
+          <a :href="githubURL">
+            <svg class="octicon octicon-mark-github v-align-middle" height="32" viewBox="0 0 16 16" version="1.1" width="32" aria-hidden="true"><path fill-rule="evenodd" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z"></path></svg>
+          </a>
+        </div>
       </div>
     </div>
-    <Modal v-model="showMarkdownModel" fullscreen title="生成Markdown接口文档">
+    <Modal v-model="showMarkdownModel" fullscreen :title="$t('title_build_md')" >
       <markdown v-model="mdData" ref="md" class="md" />
     </Modal>
     <Modal v-model="showDescModel" draggable scrollable title="填充描述信息">
       <h6>请把描述字段值用“->”分割，如: 项目ID->节点ID->项目名称->项目全名->暂无->暂无->地址->描述信息</h6>
       <Input v-model="inputFillText" @on-change="fillDesc($event.target.value)" />
     </Modal>
-    <Modal v-model="showPlayModel" title="播放功能演示" width="1000">
+    <Modal v-model="showPlayModel" :title="$t('voide_tutorial')" width="1000">
       <video
         autoplay
         controls
@@ -43,14 +47,13 @@
       <div slot="header" style="color:#f60;display:flex;">
         <p>
           <Icon type="ios-cog-outline" :size="20" />
-          <span>设置请求头</span>
+          <span>{{$t('btn_add_header')}}</span>
         </p>
         <Button shape="circle" icon="md-add" type="text" @click="addHeader" />
       </div>
-      <Table border :columns="headersColumns" :data="headersData"></Table>
+      <Table :no-data-text="$t('no_data')"  border :columns="headersColumns" :data="headersData"></Table>
     </Modal>
     <Card :padding="8" bordered dis-hover>
-      <h6 v-if="false" class="title-label">接口地址</h6>
       <Input
         class="value-content"
         v-model="inputURL"
@@ -72,8 +75,7 @@
       </Input>
     </Card>
     <Card :padding="8" bordered dis-hover class="card">
-      <h6 v-if="false" class="title-label">接口名称</h6>
-      <Input class="value-content" v-model="interfaceName" placeholder="请输入接口名称">
+      <Input class="value-content" v-model="requestName" placeholder="请输入接口名称">
         <Select v-model="nodeNumber" slot="prepend" style="width: 80px">
           <Option :value="1">1级标题</Option>
           <Option :value="2">2级标题</Option>
@@ -118,11 +120,11 @@
         placeholder
         @on-change="handleWriteRequest"
       />
-      <Table v-else border :columns="requestColumns" :data="requestData"></Table>
+      <Table :no-data-text="$t('no_data')"  v-else border :columns="requestColumns" :data="requestData"></Table>
     </Card>
     <Card :padding="8" bordered dis-hover class="card">
       <h6 class="title-label">{{$t('response')}}</h6>
-      <Table class="value-content" border :columns="responseColumns" :data="responseData"></Table>
+      <Table :no-data-text="$t('no_data')"  class="value-content" border :columns="responseColumns" :data="responseData"></Table>
     </Card>
     <Affix :offset-bottom="20">
       <div class="btn-group">
@@ -144,6 +146,7 @@
 import DigitalClock from "vue-digital-clock";
 import markdown from "./components/markdown";
 import requset from "./utils/request";
+import { setLanguage, getLanguage } from '@/utils/utils'
 
 export default {
   name: "app",
@@ -155,15 +158,26 @@ export default {
     this.updateQueryTableData();
     this.getGitWatchers();
     this.getHeaders();
+    this.lang = getLanguage() || ''
   },
   computed: {
+    languageName(){
+      const defaultName = 'Language'
+      console.log(this.lang)
+      if(this.lang){
+        let targetItem = this.$supportLang.find(item => item.key === this.lang);
+        return targetItem ? targetItem.value : defaultName
+      }else{
+        return defaultName
+      }
+    },
     btnGroupStyle(){
       return this.responseData.length > 0 ? 'success' : 'default'
     },
     typeLabel() {
       return this.selectMethod === "GET"
-        ? "GET 参数"
-        : "请求体 <application/json>";
+        ? this.$t('request_string_params')
+        : `${this.$t('request_post_payload')} <application/json>`;
     },
     bulkData() {},
     enableEdit() {
@@ -176,10 +190,22 @@ export default {
       return false;
     },
     switchEditTitle() {
-      return this.editType === "KV" ? "BULK EDIT" : "KEY-VALUE EDIT";
+      return this.editType === "KV" ? "PARSED EDIT" : "KEY-VALUE EDIT";
     }
   },
   methods: {
+    /**
+     * 切换语言
+     */
+    handleSelectedLang(lang){
+      setLanguage(lang)
+      this.$i18n.locale = lang
+      this.lang = lang
+      window.location.reload();
+    },
+    /**
+     * 得到项目的Start数
+     */
     async getGitWatchers(){
        try {
         let body = await requset({url:this.githubAPIURL});
@@ -307,7 +333,7 @@ export default {
      * 显示 Markdown
      */
     showMarkdown() {
-      // if(!this.interfaceName){
+      // if(!this.requestName){
       //   this.$Message.warning('请输入接口名称');
       //   return;
       // }
@@ -362,14 +388,14 @@ export default {
         try {
           let postBody = JSON.parse(this.inputData);
           for (let key in postBody) {
-            let type = "字符串";
+            let type = this.$t('data_type_string');
             let fieldValue = postBody[key];
             try {
               if (!Number.isNaN(Number.parseInt(fieldValue))) {
                 if (Number.isInteger(fieldValue)) {
-                  type = "整型";
+                  type = this.$t('data_type_int');
                 } else {
-                  type = "浮点数";
+                  type = this.$t('data_type_float');
                 }
               }
             } catch (error) {
@@ -386,16 +412,16 @@ export default {
       let responseBodyTable = `|参数名|参数类型|必填|参数说明|示例|
 |------|-------|----|-------|----|`;
       for (let i = 0; i < this.responseData.length; i++) {
-        let type = "字符串";
+        let type = this.$t('data_type_string');
         let item = this.responseData[i];
         try {
           if (typeof item.value === "string") {
           } else {
             if (!Number.isNaN(Number.parseInt(item.value))) {
               if (Number.isInteger(item.value)) {
-                type = "整型";
+                type = this.$t('data_type_int');
               } else {
-                type = "浮点数";
+                type = this.$t('data_type_float');
               }
             }
           }
@@ -408,34 +434,34 @@ export default {
       if (url.startsWith("http")) {
       }
       let md = `
-## ${this.nodeNumber}、${this.interfaceName}
+## ${this.nodeNumber}、${this.requestName}
 
 > 请求方式通过 \`HTTP\` 方式进行通讯， \`${
         this.selectMethod
       }\` 方式传递参数，参数的编码格式采用 \`UTF-8\` 编码格式。
 
-### ${this.nodeNumber}.1. 接口地址
+### ${this.nodeNumber}.1. ${this.$t('th_req_url')}
 
 \`${url}\`
 
-### ${this.nodeNumber}.2. 接口类型
+### ${this.nodeNumber}.2. ${this.$t('th_req_type')}
 
 ${this.selectMethod === "GET" ? getType : postType}
 
-### ${this.nodeNumber}.3. 入参模板
+### ${this.nodeNumber}.3. ${this.$t('th_req_template')}
 \`\`\`json
 ${requestBody}
 \`\`\`
-### ${this.nodeNumber}.4. 入参介绍
+### ${this.nodeNumber}.4. ${this.$t('th_req_description')}
 
 ${requestBodyTable}
 
-### ${this.nodeNumber}.5. 出参模板
+### ${this.nodeNumber}.5. ${this.$t('th_res_template')}
 
 \`\`\`json
 ${JSON.stringify(this.responseBody, null, 4)}
 \`\`\`
-### ${this.nodeNumber}.6. 出参介绍
+### ${this.nodeNumber}.6. ${this.$t('th_res_description')}
 ${responseBodyTable}
 `;
 
@@ -633,7 +659,7 @@ ${responseBodyTable}
       showMarkdownModel: false,
       showHeaderModel: false,
       nodeNumber: 1,
-      interfaceName: "",
+      requestName: "",
       responseBody: {},
       responseData: [],
       inputData: "",
@@ -890,6 +916,7 @@ ${responseBodyTable}
           description: this.$t('input_id')
         }
       ],
+      lang:'',
       gitWatchers: 0,
       githubAPIURL: "https://api.github.com/repos/yzb0101/genmd",
       githubURL: "https://www.github.com/yzb0101/genmd",
@@ -933,8 +960,10 @@ body{
   width:100%;
 }
 .bg {
+    /* background: rgb(51, 51, 51); */
   	background-image:url('./assets/fly.jpeg');
-    padding: 20px;
+    background-size:cover;
+    /* padding: 20px; */
     /* -moz-filter: blur(5px);
     -webkit-filter: blur(5px);
     -o-filter: blur(5px);
