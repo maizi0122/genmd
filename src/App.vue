@@ -163,7 +163,6 @@ export default {
   computed: {
     languageName(){
       const defaultName = 'Language'
-      console.log(this.lang)
       if(this.lang){
         let targetItem = this.$supportLang.find(item => item.key === this.lang);
         return targetItem ? targetItem.value : defaultName
@@ -300,7 +299,6 @@ export default {
      * 保存头信息
      */
     saveHeader() {
-      console.log(JSON.stringify(this.headersData));
       localStorage.setItem("headers", JSON.stringify(this.headersData));
     },
     /**

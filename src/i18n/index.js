@@ -5,10 +5,12 @@ import customZhCn from './lang/zh-CN'
 import customZhTw from './lang/zh-TW'
 import customEnUs from './lang/en-US'
 import customjaJP from './lang/ja-JP'
+import customruRU from './lang/ru-RU'
 import zhCnLocale from 'iview/src/locale/lang/zh-CN'
 import enUsLocale from 'iview/src/locale/lang/en-US'
 import zhTwLocale from 'iview/src/locale/lang/zh-TW'
 import jaJPLocale from 'iview/src/locale/lang/ja-JP'
+import ruRULocale from 'iview/src/locale/lang/ru-RU'
 
 Vue.use(VueI18n)
 
@@ -29,24 +31,30 @@ const messages = {
   'zh-CN': Object.assign(zhCnLocale, customZhCn),
   'zh-TW': Object.assign(zhTwLocale, customZhTw),
   'en-US': Object.assign(enUsLocale, customEnUs),
-  'ja-JP': Object.assign(jaJPLocale, customjaJP)
+  'ja-JP': Object.assign(jaJPLocale, customjaJP),
+  'ru-RU': Object.assign(ruRULocale, customruRU),
 }
 
 Vue.prototype.$supportLang = [
   {
     key: 'zh-CN',
-    value:'简体中文'
+    value:'🇨🇳 简体中文'
   },
   {
     key: 'zh-TW',
-    value:'繁体中文'
+    value:'🇨🇳 繁体中文'
   },
   {
     key: 'en-US',
-    value:'English'
-  },{
+    value:'🇺🇸 English'
+  },
+  {
+    key: 'ru-RU',
+    value: '🇷🇺 русский'
+  },
+  {
     key: 'ja-JP',
-    value: 'Japanese'
+    value: '🇯🇵 日本语'
   }
 ]
 
