@@ -34,6 +34,5 @@ export default {
     data_type_float: '浮点数',
     data_type_boolean: '布尔值',
     data_type_array: '数组/列表',
-    data_type_object: '对象',
-    
+    data_type_object: '对象'
 }

@@ -27,7 +27,7 @@
     <Modal v-model="showMarkdownModel" fullscreen :title="$t('title_build_md')" >
       <markdown v-model="mdData" ref="md" class="md" />
     </Modal>
-    <Modal v-model="showDescModel" draggable scrollable title="填充描述信息">
+    <Modal v-model="showDescModel" draggable scrollable :title="$t('btn_add_description')">
       <h6>请把描述字段值用“->”分割，如: 项目ID->节点ID->项目名称->项目全名->暂无->暂无->地址->描述信息</h6>
       <Input v-model="inputFillText" @on-change="fillDesc($event.target.value)" />
     </Modal>
@@ -51,7 +51,7 @@
         </p>
         <Button shape="circle" icon="md-add" type="text" @click="addHeader" />
       </div>
-      <Table :no-data-text="$t('no_data')"  border :columns="headersColumns" :data="headersData"></Table>
+      <Table   border :columns="headersColumns" :data="headersData"></Table>
     </Modal>
     <Card :padding="8" bordered dis-hover>
       <Input
@@ -120,11 +120,11 @@
         placeholder
         @on-change="handleWriteRequest"
       />
-      <Table :no-data-text="$t('no_data')"  v-else border :columns="requestColumns" :data="requestData"></Table>
+      <Table   v-else border :columns="requestColumns" :data="requestData"></Table>
     </Card>
     <Card :padding="8" bordered dis-hover class="card">
       <h6 class="title-label">{{$t('response')}}</h6>
-      <Table :no-data-text="$t('no_data')"  class="value-content" border :columns="responseColumns" :data="responseData"></Table>
+      <Table   class="value-content" border :columns="responseColumns" :data="responseData"></Table>
     </Card>
     <Affix :offset-bottom="20">
       <div class="btn-group">

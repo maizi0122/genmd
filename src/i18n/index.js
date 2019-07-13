@@ -4,9 +4,11 @@ import { getLanguage } from '@/utils/utils'
 import customZhCn from './lang/zh-CN'
 import customZhTw from './lang/zh-TW'
 import customEnUs from './lang/en-US'
+import customjaJP from './lang/ja-JP'
 import zhCnLocale from 'iview/src/locale/lang/zh-CN'
 import enUsLocale from 'iview/src/locale/lang/en-US'
 import zhTwLocale from 'iview/src/locale/lang/zh-TW'
+import jaJPLocale from 'iview/src/locale/lang/ja-JP'
 
 Vue.use(VueI18n)
 
@@ -20,10 +22,14 @@ if (local) {
   lang = (navLang === 'zh-CN' || navLang === 'en-US') ? navLang : false
 }
 
+Vue.config.lang = lang
+Vue.locale = () => {}
+
 const messages = {
   'zh-CN': Object.assign(zhCnLocale, customZhCn),
   'zh-TW': Object.assign(zhTwLocale, customZhTw),
-  'en-US': Object.assign(enUsLocale, customEnUs)
+  'en-US': Object.assign(enUsLocale, customEnUs),
+  'ja-JP': Object.assign(jaJPLocale, customjaJP)
 }
 
 Vue.prototype.$supportLang = [
@@ -38,6 +44,9 @@ Vue.prototype.$supportLang = [
   {
     key: 'en-US',
     value:'English'
+  },{
+    key: 'ja-JP',
+    value: 'Japanese'
   }
 ]
 
