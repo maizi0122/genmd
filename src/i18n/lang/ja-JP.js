@@ -34,5 +34,17 @@ export default {
     data_type_float: '浮動小数点',
     data_type_boolean: 'ブール値',
     data_type_array: '配列/リスト',
-    data_type_object: 'オブジェクト'
+    data_type_object: 'オブジェクト',
+    th_param_name: 'パラメータ名',
+    th_param_type: 'パラメータの種類',
+    th_param_required: '必要とする',
+    th_param_description: 'パラメータの説明',
+    th_param_example: '例',
+    http_req_success: '成功',
+    yes: 'はい、',
+    no: 'いいえ、',
+    holder_interface_name: 'インターフェース名を入力してください',
+    select_title: 'タイトル',
+    splicing_fill :'「説明」を「-」でつづり合わせると、プログラムは自動的に「反応」エリアに記入されます。例えば、プロジェクトID->>ノードID->>>プロジェクト名->>プロジェクト名->>>一時無->ウェブサイトアドレス->説明情報',
+    api_trans_info:'要求方式は`HTTP`方式で通信し、`GET`方式でパラメータを伝達し、パラメータの符号化フォーマットは`UTF-8`符号化形式を採用する。'
 }

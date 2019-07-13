@@ -1,6 +1,6 @@
 # Gen Markdown
 
-![alt 娱乐图](pic/preview.png)
+![alt Preview](pic/preview.png)
 
 [简体中文](README.zh-CN.md)
 

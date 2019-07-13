@@ -17,18 +17,16 @@
               <DropdownItem v-for="item of $supportLang" :name="item.key" :key="item.key">{{item.value}}</DropdownItem>
           </DropdownMenu>
         </Dropdown>
-        <div>
           <a :href="githubURL">
             <svg class="octicon octicon-mark-github v-align-middle" height="32" viewBox="0 0 16 16" version="1.1" width="32" aria-hidden="true"><path fill-rule="evenodd" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z"></path></svg>
           </a>
-        </div>
       </div>
     </div>
     <Modal v-model="showMarkdownModel" fullscreen :title="$t('title_build_md')" >
       <markdown v-model="mdData" ref="md" class="md" />
     </Modal>
     <Modal v-model="showDescModel" draggable scrollable :title="$t('btn_add_description')">
-      <h6>请把描述字段值用“->”分割，如: 项目ID->节点ID->项目名称->项目全名->暂无->暂无->地址->描述信息</h6>
+      <h6>{{$t('splicing_fill')}}</h6>
       <Input v-model="inputFillText" @on-change="fillDesc($event.target.value)" />
     </Modal>
     <Modal v-model="showPlayModel" :title="$t('voide_tutorial')" width="1000">
@@ -69,25 +67,15 @@
         </Select>
 
         <Button slot="append" :loading="loading" icon="ios-send" @click="send" class="send">
-          <span v-if="loading">Sending...</span>
-          <span v-else>Send</span>
+          <span v-if="loading">{{$t('sending')}}</span>
+          <span v-else>{{$t('send')}}</span>
         </Button>
       </Input>
     </Card>
     <Card :padding="8" bordered dis-hover class="card">
-      <Input class="value-content" v-model="requestName" placeholder="请输入接口名称">
+      <Input class="value-content" v-model="requestName" :placeholder="$t('holder_interface_name')">
         <Select v-model="nodeNumber" slot="prepend" style="width: 80px">
-          <Option :value="1">1级标题</Option>
-          <Option :value="2">2级标题</Option>
-          <Option :value="3">3级标题</Option>
-          <Option :value="4">4级标题</Option>
-          <Option :value="5">5级标题</Option>
-          <Option :value="6">6级标题</Option>
-          <Option :value="7">7级标题</Option>
-          <Option :value="8">8级标题</Option>
-          <Option :value="9">9级标题</Option>
-          <Option :value="10">10级标题</Option>
-          <Option :value="11">11级标题</Option>
+          <Option v-for="index of Array.from({length: 15}).map((v, k) => k+1)" :value="index" :key="index">{{`${$t('select_title')} (${index})`}}</Option>
         </Select>
       </Input>
     </Card>
@@ -262,7 +250,6 @@ export default {
       this.responseData = [];
       (this.responseBody = {}),
         (this.inputData = this.selectMethod === "GET" ? "" : "{}");
-      this.$Message.success("清除成功");
     },
     /**
      * 视频进入全屏
@@ -359,28 +346,33 @@ export default {
           requestBody = "暂无";
         }
       }
-
+    let paramName = this.$t('th_param_name');
+    let paramType = this.$t('th_param_type');
+    let paramRequired = this.$t('th_param_required');
+    let paramDesc = this.$t('th_param_description');
+    let paramExample = this.$t('th_param_example');
+    let defaultRequired = this.$t('yes');
       // 生成入参表格
-      let requestBodyTable = `|参数名|参数类型|必填|参数说明|示例|
+      let requestBodyTable = `|${paramName}|${paramType}|${paramRequired}|${paramDesc}|${paramExample}|
 |------|-------|----|-------|----|`;
       if (this.selectMethod === "GET") {
         for (let i = 0; i < this.requestData.length; i++) {
           let { key, value, description } = this.requestData[i];
 
-          let type = "字符串";
+          let type = this.$t('data_type_string');
           let fieldValue = value;
           try {
             if (!Number.isNaN(Number.parseInt(fieldValue))) {
               if (Number.isInteger(fieldValue)) {
-                type = "整型";
+                type = this.$t('data_type_int');
               } else {
-                type = "浮点数";
+                type = this.$t('data_type_float');
               }
             }
           } catch (error) {
             //
           }
-          requestBodyTable += `\n|${key}|${type}|是|${description}|${fieldValue}|`;
+          requestBodyTable += `\n|${key}|${type}|${defaultRequired}|${description}|${fieldValue}|`;
         }
       } else {
         try {
@@ -399,7 +391,7 @@ export default {
             } catch (error) {
               //
             }
-            requestBodyTable += `\n|${key}|${type}|是|-|${fieldValue}|`;
+            requestBodyTable += `\n|${key}|${type}|${defaultRequired}|-|${fieldValue}|`;
           }
         } catch (error) {
           requestBodyTable = "暂无";
@@ -407,7 +399,7 @@ export default {
       }
 
       // 生成出参表格
-      let responseBodyTable = `|参数名|参数类型|必填|参数说明|示例|
+      let responseBodyTable = `|${paramName}|${paramType}|${paramRequired}|${paramDesc}|${paramExample}|
 |------|-------|----|-------|----|`;
       for (let i = 0; i < this.responseData.length; i++) {
         let type = this.$t('data_type_string');
@@ -426,7 +418,7 @@ export default {
         } catch (error) {
           //
         }
-        responseBodyTable += `\n|${item.key}|${type}|是|${item.description}|${item.value}|`;
+        responseBodyTable += `\n|${item.key}|${type}|${defaultRequired}|${item.description}|${item.value}|`;
       }
       let url = this.inputURL;
       if (url.startsWith("http")) {
@@ -434,9 +426,7 @@ export default {
       let md = `
 ## ${this.nodeNumber}、${this.requestName}
 
-> 请求方式通过 \`HTTP\` 方式进行通讯， \`${
-        this.selectMethod
-      }\` 方式传递参数，参数的编码格式采用 \`UTF-8\` 编码格式。
+> ${this.$t('api_trans_info').replace('GET',this.selectMethod)}
 
 ### ${this.nodeNumber}.1. ${this.$t('th_req_url')}
 
@@ -498,7 +488,7 @@ ${responseBodyTable}
       let body;
       try {
         body = await requset(opt);
-        this.$Message.success("请求成功");
+        this.$Message.success(this.$t('http_req_success'));
         this.$Loading.finish();
       } catch (error) {
         if(!this.$Message.isShow){
